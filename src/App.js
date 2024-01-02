@@ -33,7 +33,7 @@ function App() {
   return (
     <div className="App">
       <h1>Stopwatch</h1>
-      <p>Time : {format(timer)}</p>
+      <p>Time: {format(timer)}</p>
       <button onClick={toggleHandler}>{click? "Stop" : "Start"}</button>
       <button onClick={reset}>Reset</button>
     </div>
