@@ -1,23 +1,34 @@
 import logo from './logo.svg';
 import './App.css';
+import React,{useState, useEffect} from 'react';
+
 
 function App() {
+  const [data, setData] = useState([]);
+  const getData = async() =>{
+    try{
+      const res = await fetch('https://restcountries.com/v3.1/all');
+      const c = await res.json()
+      setData(c);
+    }catch(err){
+      console.err(err);
+    }
+  } 
+  useEffect(()=>{
+    getData();
+  },[])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className='containerStyle'>
+        {data.map((item)=>{
+          return(
+            <div className='cardStyle'>
+              <img className='imageStyle' src={item.flags.png} alt="country-flag"/>
+              <h2>{item.name.common}</h2>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
