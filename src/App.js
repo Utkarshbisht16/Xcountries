@@ -5,7 +5,7 @@ import React,{useState, useEffect,useRef} from 'react';
 const format = (timer) =>{
   const mins = Math.floor(timer/60);
   timer %= 60;
-  return `${mins} : ${timer < 10 ? "0" : ""}${timer}`
+  return `${mins}:${timer < 10 ? "0" : ""}${timer}`
 }
 function App() {
   const [click, setClick] = useState(false);
