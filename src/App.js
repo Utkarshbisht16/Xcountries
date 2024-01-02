@@ -11,7 +11,7 @@ function App() {
       const c = await res.json()
       setData(c);
     }catch(err){
-      console.err(err);
+      console.log(err);
     }
   } 
   useEffect(()=>{
