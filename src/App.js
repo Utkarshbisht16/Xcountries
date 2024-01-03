@@ -2,40 +2,35 @@
 import './App.css';
 import React,{useState, useEffect,useRef} from 'react';
 
-const format = (timer) =>{
-  const mins = Math.floor(timer/60);
-  timer %= 60;
-  return `${mins}:${timer < 10 ? "0" : ""}${timer}`
-}
+
 function App() {
-  const [click, setClick] = useState(false);
-  const [timer, setTimer] = useState(0);
-  const timerId = useRef(null);
+  const [active, isActive] = useState(false);
+  const fName = useRef(null);
+  const sName = useRef(null);
 
-  const toggleHandler = () =>{
-    setClick(!click);
+  const show = (
+    <p>Full Name: {fName.current} {sName.current}</p>
+  )
+  const handel = (e) =>{
+    e.preventDefault();
+    var form = new FormData(document.getElementById("f"));
+    var fname = form.get("fname");
+    var sname = form.get("sname");
+    fName.current = fname;
+    sName.current = sname;
+    isActive(true);
   }
-  const reset = () =>{
-    setClick(false);
-    setTimer(0);
-  }
-  useEffect(()=>{
-    timerId.current = setInterval(()=>{
-      if(click){
-        setTimer((prevTimer)=>prevTimer+1);
-      }
-    },1000);
-    return () =>{
-      clearInterval(timerId.current);
-    }
-  },[timer,click])
-
   return (
     <div className="App">
-      <h1>Stopwatch</h1>
-      <p>Time: {format(timer)}</p>
-      <button onClick={toggleHandler}>{click? "Stop" : "Start"}</button>
-      <button onClick={reset}>Reset</button>
+      <h1>Full Name Display</h1>
+      <form id='f' onSubmit={handel}>
+        <label>First Name:</label>
+        <input required type='text' name='fname'></input><br/>
+        <label>Last Name:</label>
+        <input required type='text' name='sname'></input><br/>
+        <button type='submit'>Sumbit</button>
+        {active ? show : null}
+      </form>
     </div>
   );
 }
