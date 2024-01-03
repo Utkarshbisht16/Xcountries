@@ -1,5 +1,6 @@
 .App {
   font-family: 'Times New Roman', Times, serif;
+  text-align: center;
 }
 
 .App-logo {
@@ -12,7 +13,12 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-
+button{
+  margin: 5px;
+  height: 50px;
+  width: 50px;
+  border-radius: 5px;
+}
 .App-header {
   background-color: #282c34;
   min-height: 100vh;
