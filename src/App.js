@@ -4,45 +4,42 @@ import React,{useState, useEffect,useRef} from 'react';
 
 
 function App() {
-  const [text, setText] = useState("");
-  const [ans, setAns] = useState("");
-  var handel = (val) =>{
-    const x = val.target.innerHTML;
-    if(x == '='){
-      if(text == ""){
-        setAns("Error");
-      }else{
-        let res = eval(text);
-        setAns(res);
-      }
-    }else if(x == 'C'){
-      setText("");
-      setAns("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const handel = (e) =>{
+    e.preventDefault();
+    if(username === 'user' && password === 'password'){
+      setError("");
+      setIsSubmitted(true);
     }else{
-      setText(t => t + x);
+      setError("Invalid username or password");
+      setIsSubmitted(false);
     }
   }
   return (
     <div className="App">
-      <h1>React Calculator</h1>
-      <input type='text' value={text}></input>
-      <div id='result'>{ans}</div>
-      <button onClick={handel}>1</button>
-      <button onClick={handel}>2</button>
-      <button onClick={handel}>3</button>
-      <button onClick={handel}>+</button><br/>
-      <button onClick={handel}>4</button> 
-      <button onClick={handel}>5</button>
-      <button onClick={handel}>6</button>
-      <button onClick={handel}>-</button><br/>
-      <button onClick={handel}>7</button>
-      <button onClick={handel}>8</button>
-      <button onClick={handel}>9</button>
-      <button onClick={handel}>*</button><br/>
-      <button onClick={handel}>C</button>
-      <button onClick={handel}>0</button>
-      <button onClick={handel}>=</button>
-      <button onClick={handel}>/</button>
+      <h1>Login Page</h1>
+      {isSubmitted ? (
+        <div>
+          <p>Welcome, {username}!</p>
+        </div>
+      ):(
+        <form onSubmit={handel}>
+          {error && <p className='error'>{error}</p>}
+          <label htmlFor='username'>
+            Username:
+            <input type='text' placeholder='username' value={username} required onChange={(e)=>setUsername(e.target.value)}></input>
+          </label><br/>
+          <label htmlFor='password'>
+            Password:
+            <input type='text' placeholder='password' value={password} required onChange={(e)=>setPassword(e.target.value)}></input>
+          </label>
+          <button type='submit'>Submit</button>
+        </form>
+      )}
+      
     </div>
   );
 }
