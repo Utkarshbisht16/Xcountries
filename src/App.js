@@ -30,12 +30,12 @@ function App() {
           {error && <p className='error'>{error}</p>}
           <label htmlFor='username'>
             Username:
-            <input type='text' placeholder='username' value={username} required onChange={(e)=>setUsername(e.target.value)}></input>
-          </label><br/>
+          </label>
+          <input type='text' placeholder='username' value={username} required onChange={(e)=>setUsername(e.target.value)}></input><br/>
           <label htmlFor='password'>
             Password:
-            <input type='text' placeholder='password' value={password} required onChange={(e)=>setPassword(e.target.value)}></input>
           </label>
+          <input type='text' placeholder='password' value={password} required onChange={(e)=>setPassword(e.target.value)}></input>
           <button type='submit'>Submit</button>
         </form>
       )}
