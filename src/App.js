@@ -4,42 +4,124 @@ import React,{useState, useEffect,useRef} from 'react';
 
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const handel = (e) =>{
-    e.preventDefault();
-    if(username === 'user' && password === 'password'){
-      setError("");
-      setIsSubmitted(true);
-    }else{
-      setError("Invalid username or password");
-      setIsSubmitted(false);
+  const [countries, setCountries] = useState([]);
+  const [state, setState] = useState([]);
+  const [city, setCity] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selected, setSelected] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+
+  const getData = async() =>{
+    try{
+      const res = await fetch('https://crio-location-selector.onrender.com/countries');
+      const data = await res.json();
+      setCountries(data);
+    }catch(err){
+      console.error(err);
     }
   }
+  const getStateData = async() =>{
+    try{
+      const res = await fetch(`https://crio-location-selector.onrender.com/country=${selected}/states`);
+      const data = await res.json();
+
+      setState(data);
+      setSelectedState("");
+      setCity([]);
+      setSelectedCity("");
+    }catch(err){
+      console.error("Error fetching states:", err);
+    }
+  }
+  const getCityData = async() =>{
+    try{
+      const res = await fetch(`https://crio-location-selector.onrender.com/country=${selected}/state=${selectedState}/cities`);
+      const data = await res.json();
+
+      setCity(data);
+      setSelectedCity("");
+    }catch(err){
+      console.error("Error fetching cities:", err);
+    }
+  }
+  const handel = (e) =>{
+    setSelected(e.target.value);
+  }
+  const handelState = (e) =>{
+    setSelectedState(e.target.value);
+  }
+  const handelCity = (e) =>{
+    setSelectedCity(e.target.value);
+  }
+  useEffect(()=>{
+    getData();
+  },[])
+  useEffect(()=>{
+    if(selected){
+      getStateData(selected);
+    }
+  },[selected])
+  useEffect(()=>{
+    if(selected && selectedState){
+      getCityData(selectedState);
+    }
+  },[selected, selectedState])
   return (
     <div className="App">
-      <h1>Login Page</h1>
-      {isSubmitted ? (
-        <div>
-          <p>Welcome, {username}!</p>
-        </div>
-      ):(
-        <form onSubmit={handel}>
-          {error && <p className='error'>{error}</p>}
-          <label htmlFor='username'>
-            Username:
-          </label>
-          <input type='text' placeholder='username' value={username} required onChange={(e)=>setUsername(e.target.value)}></input><br/>
-          <label htmlFor='password'>
-            Password:
-          </label>
-          <input type='text' placeholder='password' value={password} required onChange={(e)=>setPassword(e.target.value)}></input>
-          <button type='submit'>Submit</button>
-        </form>
+      <h1>Select Location</h1>
+      <div>
+        <select onChange={handel} value={selected}>
+          <option value='' disabled>
+            Select Country
+          </option>
+          {
+            countries.map((item)=>{
+              return(
+                <option value={item}>
+                  {item}
+                </option>
+              )
+            })
+          }
+        </select>
+        <select onChange={handelState} value={selectedState}>
+          <option value='' disabled>
+            Select State
+          </option>
+          {
+            state.map((item)=>{
+              return(
+                <option value={item}>
+                  {item}
+                </option>
+              )
+            })
+          }
+        </select>
+        <select onChange={handelCity} value={selectedCity}>
+          <option value='' disabled>
+            Select City
+          </option>
+          {
+            city.map((item)=>{
+              return(
+                <option value={item}>
+                  {item}
+                </option>
+              )
+            })
+          }
+        </select>
+      </div>
+      {selectedCity && (
+        <h2 className=''result>
+          You Selected <span className='highlight'>{selectedCity}</span>,
+          <span className='fade'>
+            {" "}
+            {selectedState}, {selected}
+          </span>
+        </h2>
       )}
-      
     </div>
   );
 }
