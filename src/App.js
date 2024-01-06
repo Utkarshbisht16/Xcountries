@@ -14,17 +14,18 @@ const App = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
 
-  useEffect(() => {
-    axios
-      .get(
-        "https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json"
-      )
-      .then((response) => {
-        setItems(response.data);
-      })
-      .catch((error) => {
+  const data = async() =>{
+    
+      try{
+        const data = await fetch("https://geektrust.s3-ap-southeast-1.amazonaws.com/adminui-problem/members.json");
+        const res = await data.json();
+        setItems(res);
+      }catch(err){
         alert("Failed to fetch data");
-      });
+      }
+  }
+  useEffect(() => {
+     data();
   }, []);
 
   // Get current items
