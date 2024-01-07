@@ -33,7 +33,7 @@ export default function App() {
         setCity(city);
       } catch (err) {
         
-        console.log("Error fetching data", err.message);
+        // console.log("Error fetching data", err.message);
         alert("Failed to fetch weather data");
       } finally {
         setIsLoading(false);
