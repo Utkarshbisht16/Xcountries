@@ -17,7 +17,7 @@ function App() {
       const c = await res.json()
       setData(c);
     }catch(err){
-      console.err(err);
+      console.error(err);
     }
   }
   const handel = (e) =>{
@@ -35,7 +35,8 @@ function App() {
             var val = item.name.common;
             if(val.includes(search)){
               return(
-                <div className='cardStyle'>
+                <div className='cardStyle' style={{flexDirection: 'column'}}>
+                {/* <div style={{display:'flex', flexDirection:'column', width:200}} > */}
                   <img className='imageStyle' src={item.flags.png} alt="country-flag"/>
                   <h2>{item.name.common}</h2>
                 </div>
@@ -45,7 +46,8 @@ function App() {
           }))
         ) : (data.map((item)=>{
           return(
-            <div className='cardStyle'>
+            <div className='cardStyle' style={{flexDirection: 'column'}}>
+            {/* <div style={{display:'flex', flexDirection:'column', width:200}}> */}
               <img className='imageStyle' src={item.flags.png} alt="country-flag"/>
               <h2>{item.name.common}</h2>
             </div>
