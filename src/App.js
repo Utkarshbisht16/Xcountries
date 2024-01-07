@@ -32,8 +32,9 @@ function App() {
       <div className='containerStyle'>
         {search ? (
           (data.map((item)=>{
-            var val = item.name.common;
-            if(val.includes(search)){
+            var val = item.name.common.toLowerCase();
+            
+            if(val.includes(search.toLowerCase())){
               return(
                 <div className='cardStyle' style={{flexDirection: 'column'}}>
                 {/* <div style={{display:'flex', flexDirection:'column', width:200}} > */}
@@ -42,7 +43,6 @@ function App() {
                 </div>
               );
             }
-            
           }))
         ) : (data.map((item)=>{
           return(
