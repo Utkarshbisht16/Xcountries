@@ -1,60 +1,69 @@
+import { useState } from "react";
+import "./styles.css";
+const data = [
+  { date: "2022-09-01", views: 100, article: "Article 1" },
 
-// import logo from './logo.svg';
-// import './App.css';
-// import React,{useState, useEffect,useRef} from 'react';
+  { date: "2023-09-01", views: 100, article: "Article 1" },
 
-// import logo from './logo.svg';
-import './App.css';
-import React,{useState, useEffect} from 'react';
+  { date: "2023-09-02", views: 150, article: "Article 2" },
 
+  { date: "2023-09-02", views: 120, article: "Article 3" },
 
-function App() {
-  const [data, setData] = useState([]);
-  const [search, setSearch] = useState("");
-  const getData = async() =>{
-    try{
-      const res = await fetch('https://restcountries.com/v3.1/all');
-      const c = await res.json()
-      setData(c);
-    }catch(err){
-      console.error(err);
-    }
-  }
-  const handel = (e) =>{
-    setSearch(e.target.value);
-  }
-  useEffect(()=>{
-    getData();
-  },[])
+  { date: "2020-09-03", views: 200, article: "Article 4" },
+];
+
+export default function App() {
+  const [posts, setPosts] = useState(data);
+
+  const sortByDate = (posts) => {
+    let sortedPosts = [...posts].sort((a, b) => {
+      if (new Date(a.date) === new Date(b.date)) {
+        return b.views - a.views;
+      }
+      return new Date(b.date) - new Date(a.date);
+    });
+    setPosts(sortedPosts);
+  };
+  const sortByViews = (posts) => {
+    let sortedPosts = [...posts].sort((a, b) => {
+      if (a.views === b.views) {
+        return new Date(b.date) - new Date(a.date); // If views are the same, sort by date
+      }
+      return b.views - a.views;
+    });
+    setPosts(sortedPosts);
+  };
   return (
     <div className="App">
-    <input type='text' onChange={handel} className='Header' placeholder='Search for countries'/>
-      <div className='containerStyle'>
-        {search ? (
-          (data.map((item)=>{
-            var val = item.name.common.toLowerCase();
-            
-            if(val.includes(search.toLowerCase())){
-              return(
-                <div className='cardStyle' style={{flexDirection: 'column'}}>
-                {/* <div style={{display:'flex', flexDirection:'column', width:200}} > */}
-                  <img className='imageStyle' src={item.flags.png} alt="country-flag"/>
-                  <h2>{item.name.common}</h2>
-                </div>
-              );
-            }
-          }))
-        ) : (data.map((item)=>{
-          return(
-            <div className='cardStyle' style={{flexDirection: 'column'}}>
-            {/* <div style={{display:'flex', flexDirection:'column', width:200}}> */}
-              <img className='imageStyle' src={item.flags.png} alt="country-flag"/>
-              <h2>{item.name.common}</h2>
-            </div>
-          );
-        }))}
-      </div>
+      <h1>Date and Views Table</h1>
+      <table>
+        <tbody>
+          <tr>
+            <td>
+              <button onClick={() => sortByDate(posts)}>Sort by Date</button>
+            </td>
+            <td>
+              <button onClick={() => sortByViews(posts)}>Sort by Views</button>
+            </td>
+          </tr>
+
+          <tr>
+            <th>Date</th>
+            <th>Views</th>
+            <th>Article</th>
+          </tr>
+
+          {posts.map((item) => {
+            return (
+              <tr>
+                <td>{item.date}</td>
+                <td>{item.views}</td>
+                <td>{item.article}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
-export default App;
