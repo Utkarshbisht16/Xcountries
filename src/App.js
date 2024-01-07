@@ -1,48 +1,47 @@
 import { useState } from "react";
 import "./styles.css";
+const customDictionary = {
+  teh: "the",
+
+  wrok: "work",
+
+  fot: "for",
+
+  exampl: "example",
+};
 
 export default function App() {
-  const [dictionary, setDictionary] = useState([
-    {
-    word: "React",
-    meaning: "A JavaScript library for building user interfaces."
-    },
-    { word: "Component", meaning: "A reusable building block in React." },
-    { word: "State", meaning: "An object that stores data for a component." }
-    // Add more words and meanings as needed
-    ]);
-    
-    const [searchTerm, setSearchTerm] = useState("");
-    const [searchResult, setSearchResult] = useState("");
-    
-    // Function to handle word search
-    const handleSearch = () => {
-    const foundWord = dictionary.find(
-    (entry) => entry.word.toLowerCase() === searchTerm.toLowerCase()
-    );
-    if (foundWord) {
-    setSearchResult(foundWord.meaning);
-    } else {
-    setSearchResult("Word not found in the dictionary.");
-    }
-    };
-    
-    return (
-    <div className="App">
-    <h1>Dictionary App</h1>
+  const [text, setText] = useState("");
+  const [suggestions, setSuggestions] = useState("");
+  const handleChange = (e) => {
+    const inputText = e.target.value;
+    setText(inputText);
+    const words = inputText.split(" ");
+    const correctedWords = words.map((el) => {
+      const correctedWord = customDictionary[el.toLowerCase()];
+      return correctedWord || el;
+    });
+    const correctedText = correctedWords.join(" ");
+    const firstCorrection = correctedWords.find((el, idx) => {
+      return el !== words[idx];
+    });
+    setSuggestions(firstCorrection || "");
+  };
+  return (
     <div>
-    <input
-    type="text"
-    placeholder="Search for a word..."
-    value={searchTerm}
-    onChange={(e) => setSearchTerm(e.target.value)}
-    />
-    <button onClick={handleSearch}>Search</button>
+      <h1>Spell Check and Auto-Correction</h1>
+      <textarea
+        value={text}
+        onChange={handleChange}
+        placeholder="Enter text..."
+        rows={5}
+        cols={40}
+      />
+      {suggestions && (
+        <p>
+          Did you mean: <strong>{suggestions}</strong>?
+        </p>
+      )}
     </div>
-    <div>
-    <strong>Definition:</strong>
-    <p>{searchResult}</p>
-    </div>
-    </div>
-    );
-    }
+  );
+}
